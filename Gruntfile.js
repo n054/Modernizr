@@ -1,242 +1,225 @@
-/*jshint node: true */
 /*global module */
-module.exports = function( grunt ) {
+
+var browsers = require('./test/browser/sauce-browsers.json');
+var serveStatic = require('serve-static');
+
+module.exports = function(grunt) {
   'use strict';
 
-  var modConfig = grunt.file.readJSON('lib/config-all.json');
-  var browsers = grunt.file.readJSON('lib/sauce-browsers.json');
-
-  // Load grunt dependencies
+  // load grunt dependencies
   require('load-grunt-tasks')(grunt);
 
+  var browserTests = grunt.file.expand([
+    'test/universal/**/*.js',
+    'test/browser/**/*.js',
+    '!test/browser/setup.js',
+    '!test/browser/integration/*.js'
+  ]);
+
   grunt.initConfig({
-    pkg: grunt.file.readJSON('package.json'),
-    banner: {
-      compact: '/*! <%= pkg.name %> <%= pkg.version %> (Custom Build) | <%= pkg.license %> */',
-      full: '/*!\n' +
-        ' * <%= pkg.name %> v<%= pkg.version %>\n' +
-        ' * modernizr.com\n *\n' +
-        ' * Copyright (c) <%= _.pluck(pkg.contributors, "name").join(", ") %>\n' +
-        ' * <%= pkg.license %> License\n */' +
-        ' \n' +
-        '/*\n' +
-        ' * Modernizr tests which native CSS3 and HTML5 features are available in the\n' +
-        ' * current UA and makes the results available to you in two ways: as properties on\n' +
-        ' * a global `Modernizr` object, and as classes on the `<html>` element. This\n' +
-        ' * information allows you to progressively enhance your pages with a granular level\n' +
-        ' * of control over the experience.\n' +
-        ' *\n' +
-        ' */'
-    },
-    meta: {
-    },
-    qunit: {
-      files: ['test/index.html']
-    },
-    nodeunit: {
-      files: ['test/api/*.js']
-    },
-    stripdefine: {
-      build: ['dist/modernizr-build.js']
-    },
-    generateinit: {
-      build: {
-        src: ['tmp/modernizr-init.js']
-      }
-    },
-    uglify: {
-      options: {
-        stripbanners: true,
-        banner: '<%= banner.compact %>',
-        mangle: {
-          except: ['Modernizr']
-        },
-        beautify: {
-          ascii_only: true
-        }
-      },
-      dist: {
-        src: ['dist/modernizr-build.js'],
-        dest: 'dist/modernizr-build.min.js'
-      }
-    },
-    watch: {
-      files: '<%= jshint.files %>',
-      tasks: 'jshint',
-      tests: {
-        files: '<%= jshint.tests.files.src %>',
-        tasks: [
-          'jshint:tests',
-          'qunit'
+    env: {
+      nodeTests: [
+        'test/universal/**/*.js',
+        'test/node/**/*.js'
+      ],
+      browserTests: browserTests,
+      coverage: {
+        APP_DIR_FOR_CODE_COVERAGE: 'test/coverage/instrument',
+        urls: [
+          'http://localhost:9999/test/unit.html',
+          'http://localhost:9999/test/index.html'
         ]
       }
     },
-    jshint: {
-      options: {
-        jshintrc: true,
-        ignores: [
-          'src/html5printshiv.js',
-          'src/html5shiv.js'
+    generate: {
+      dest: './dist/modernizr-build.js'
+    },
+    copy: {
+      'gh-pages': {
+        files: [
+          {
+            expand: true,
+            src: [
+              './**/*',
+              '!./test/coverage/**',
+              '!./node_modules/*grunt-*/**',
+              '!./node_modules/**/node_modules/**'
+            ],
+            dest: 'gh-pages'
+          }
         ]
-      },
-      files: [
+      }
+    },
+    eslint: {
+      target: [
+        '<%= env.nodeTests%>',
+        '<%= env.browserTests %>',
+        'test/browser/setup.js',
+        'test/browser/integration/*.js',
         'Gruntfile.js',
         'src/*.js',
-        'feature-detects/**/*.js'
+        'lib/*.js',
+        'test/**/*.js',
+        'feature-detects/**/*.js',
+        '!src/html5printshiv.js',
+        '!test/coverage/**/*.js',
+        '!test/js/lib/**/*.js',
+        '!src/html5shiv.js'
       ],
-      tests: {
-        options: {
-          jquery: true,
-          globals: {
-            Modernizr: true,
-            TEST: true,
-            QUnit: true
-          }
-        },
-        files: {
-          src: ['test/js/*.js']
-        }
-      },
-      lib: {
-        options: {
-          node: true
-        },
-        files: {
-          src: ['lib/*.js']
-        }
+      options: {
+        rulePaths: ['test/eslint/rules']
       }
     },
     clean: {
-      dist: ['dist'],
-      postbuild: [
-        'build',
-        'tmp'
+      dist: [
+        'dist',
+        'test/coverage',
+        'test/*.html',
+        'gh-pages'
       ]
     },
-    copy: {
-      build: {
-        files: {
-          'dist/modernizr-build.js': 'build/src/modernizr-build.js'
-        }
-      }
-    },
-    requirejs: {
+    jade: {
       compile: {
         options: {
-          dir: 'build',
-          appDir: '.',
-          baseUrl: 'src',
-          optimize: 'none',
-          optimizeCss: 'none',
-          useStrict: true,
-          paths: {
-            'test': '../feature-detects',
-            'modernizr-init': '../tmp/modernizr-init'
-          },
-          modules: [{
-            'name': 'modernizr-build',
-            'include': ['modernizr-init'],
-            'create': true
-          }],
-          fileExclusionRegExp: /^(.git|node_modules|modulizr|media|test)$/,
-          wrap: {
-            start: '<%= banner.full %>' + '\n;(function(window, document, undefined){',
-            end: '})(this, document);'
-          },
-          onBuildWrite: function (id, path, contents) {
-            if ((/define\(.*?\{/).test(contents)) {
-              //Remove AMD ceremony for use without require.js or almond.js
-              contents = contents.replace(/define\(.*?\{/, '');
-
-              contents = contents.replace(/\}\);\s*?$/,'');
-
-              if ( !contents.match(/Modernizr\.addTest\(/) && !contents.match(/Modernizr\.addAsyncTest\(/) ) {
-                //remove last return statement and trailing })
-                contents = contents.replace(/return.*[^return]*$/,'');
-              }
-            }
-            else if ((/require\([^\{]*?\{/).test(contents)) {
-              contents = contents.replace(/require[^\{]+\{/, '');
-              contents = contents.replace(/\}\);\s*$/,'');
-            }
-
-            return contents;
+          data: {
+            unitTests: browserTests,
+            integrationTests: grunt.file.expand(['test/browser/integration/*.js'])
           }
+        },
+        files: {
+          'test/unit.html': 'test/browser/unit.jade',
+          'test/iframe.html': 'test/browser/iframe.jade',
+          'test/index.html': 'test/browser/integration.jade'
         }
       }
     },
     connect: {
       server: {
         options: {
-          base: '',
+          middleware: function() {
+            return [
+              function(req, res, next) {
+                // catchall middleware used in testing
+                var ua = req.headers['user-agent'];
+
+                // record code coverage results from browsers
+                if (req.url == '/coverage/client' && req.method == 'POST') {
+                  var name = encodeURI(ua.replace(/\//g, '-'));
+                  var body = '';
+
+                  req.on('data', function(data) {
+                    body = body + data;
+                  });
+
+                  req.on('end', function() {
+                    grunt.file.write('test/coverage/reports/' + name + '.json', body);
+                    res.end();
+                  });
+
+                  return;
+                }
+
+                // redirect requests form the `require`d components to their instrumented versions
+                if (req.url.match(/^\/(src|lib)\//)) {
+                  req.url = '/test/coverage/instrument' + req.url;
+                }
+
+                next();
+              },
+              serveStatic(__dirname)
+            ];
+          },
           port: 9999
         }
       }
     },
-    'saucelabs-qunit': {
+    'saucelabs-custom': {
       all: {
         options: {
-          urls: ['http://127.0.0.1:9999/test/basic.html'],
-          tunnelTimeout: 5,
-          build: process.env.TRAVIS_JOB_ID,
-          concurrency: 2,
+          urls:  '<%= env.coverage.urls %>',
+          testname: process.env.CI_BUILD_NUMBER || 'Modernizr Test',
           browsers: browsers,
-          testname: 'qunit tests',
-          tags: [
-            'master',
-            '<%= pkg.version %>'
-          ]
+          maxRetries: 3
+        }
+      }
+    },
+    mocha: {
+      test: {
+        options: {
+          urls: '<%= env.coverage.urls %>',
+          log: true
+        },
+      },
+    },
+    // `mocha` runs browser tests, `mochaTest` runs node tests
+    mochaTest: {
+      test: {
+        options: {
+          reporter: 'dot',
+          timeout: 5000
+        },
+        src: ['<%= env.nodeTests%>']
+      }
+    },
+    instrument: {
+      files: [
+        'src/**/*.js',
+        'lib/**/*.js'
+      ],
+      options: {
+        basePath: 'test/coverage/instrument/'
+      }
+    },
+    storeCoverage: {
+      options: {
+        dir: 'test/coverage/reports'
+      }
+    },
+    makeReport: {
+      src: 'test/coverage/reports/**/*.json',
+      options: {
+        type: 'lcov',
+        dir: 'test/coverage/reports',
+        print: 'detail'
+      }
+    },
+    coveralls: {
+      all: {
+        src: 'test/coverage/reports/lcov.info',
+        options: {
+          force: true
         }
       }
     }
   });
 
-  // Strip define fn
-  grunt.registerMultiTask('stripdefine', 'Strip define call from dist file', function() {
-    this.filesSrc.forEach(function(filepath) {
-      // Remove `define('modernizr-init' ...)` and `define('modernizr-build' ...)`
-      var mod = grunt.file.read(filepath).replace(/define\("modernizr-(init|build)", function\(\)\{\}\);/g, '');
+  grunt.registerMultiTask('generate', 'Create a version of Modernizr from Grunt', function() {
+    var done = this.async();
+    var config = require('./lib/config-all');
+    var modernizr = require('./lib/cli');
+    var dest = this.data;
 
-      // Hack the prefix into place. Anything is way too big for something so small.
-      if ( modConfig && modConfig.classPrefix ) {
-        mod = mod.replace('classPrefix : \'\',', 'classPrefix : \'' + modConfig.classPrefix.replace(/"/g, '\\"') + '\',');
-      }
-      grunt.file.write(filepath, mod);
+    modernizr.build(config, function(output) {
+      grunt.file.write(dest, output);
+      done();
     });
   });
 
-  grunt.registerMultiTask('generateinit', 'Generate Init file', function() {
-    var requirejs = require('requirejs');
-    requirejs.config({
-      appDir: __dirname + '/src/',
-      baseUrl: __dirname + '/src/'
-    });
-    var generateInit = requirejs('generate');
-    grunt.file.write('tmp/modernizr-init.js', generateInit(modConfig));
-  });
+  grunt.registerTask('nodeTests', ['mochaTest']);
 
-  // Testing tasks
-  grunt.registerTask('test', ['jshint', 'build', 'qunit', 'nodeunit']);
+  grunt.registerTask('browserTests', ['connect', 'mocha']);
 
-  // Sauce labs CI task
-  grunt.registerTask('sauce', ['connect','saucelabs-qunit']);
+  grunt.registerTask('build', ['clean', 'generate']);
 
-  // Travis CI task.
-  grunt.registerTask('travis', ['test']);
+  grunt.registerTask('default', ['eslint', 'build']);
 
-  // Build
-  grunt.registerTask('build', [
-    'clean',
-    'generateinit',
-    'requirejs',
-    'copy',
-    'clean:postbuild',
-    'stripdefine',
-    'uglify'
-  ]);
+  var tests = ['clean', 'eslint', 'jade', 'instrument', 'env:coverage', 'nodeTests'];
 
-  grunt.registerTask('default', [
-    'jshint',
-    'build'
-  ]);
+  if (process.env.APPVEYOR) {
+    grunt.registerTask('test', tests);
+  } else if (process.env.BROWSER_COVERAGE !== 'true') {
+    grunt.registerTask('test', tests.concat(['generate', 'browserTests']));
+  } else {
+    grunt.registerTask('test', tests.concat(['generate', 'storeCoverage', 'browserTests', 'saucelabs-custom', 'makeReport', 'coveralls']));
+  }
 };

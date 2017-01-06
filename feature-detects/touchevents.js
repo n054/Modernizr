@@ -6,7 +6,7 @@
   "tags": ["media", "attribute"],
   "notes": [{
     "name": "Touch Events spec",
-    "href": "http://www.w3.org/TR/2013/WD-touch-events-20130124/"
+    "href": "https://www.w3.org/TR/2013/WD-touch-events-20130124/"
   }],
   "warnings": [
     "Indicates if the browser supports the Touch Events spec, and does not necessarily reflect a touchscreen device"
@@ -33,15 +33,17 @@ It's recommended to bind both mouse and touch/pointer events simultaneously – 
 
 This test will also return `true` for Firefox 4 Multitouch support.
 */
-define(['Modernizr', 'prefixes', 'testStyles'], function( Modernizr, prefixes, testStyles ) {
+define(['Modernizr', 'prefixes', 'testStyles'], function(Modernizr, prefixes, testStyles) {
   // Chrome (desktop) used to lie about its support on this, but that has since been rectified: http://crbug.com/36415
   Modernizr.addTest('touchevents', function() {
     var bool;
-    if(('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
+    if (('ontouchstart' in window) || window.DocumentTouch && document instanceof DocumentTouch) {
       bool = true;
     } else {
-      var query = ['@media (',prefixes.join('touch-enabled),('),'heartz',')','{#modernizr{top:9px;position:absolute}}'].join('');
-      testStyles(query, function( node ) {
+      // include the 'heartz' as a way to have a non matching MQ to help terminate the join
+      // https://git.io/vznFH
+      var query = ['@media (', prefixes.join('touch-enabled),('), 'heartz', ')', '{#modernizr{top:9px;position:absolute}}'].join('');
+      testStyles(query, function(node) {
         bool = node.offsetTop === 9;
       });
     }

@@ -6,7 +6,7 @@
   "builderAliases": ["custom_protocol_handler"],
   "notes": [{
     "name": "WHATWG overview",
-    "href": "http://developers.whatwg.org/timers.html#custom-handlers"
+    "href": "https://developers.whatwg.org/timers.html#custom-handlers"
   },{
     "name": "MDN documentation",
     "href": "https://developer.mozilla.org/en-US/docs/Web/API/navigator.registerProtocolHandler"
@@ -16,13 +16,14 @@
 }
 !*/
 /* DOC
-Detects support for the `window.registerProtocolHandler()` API to allow web
-sites to register themselves as possible handlers for particular protocols.
+Detects support for the `window.registerProtocolHandler()` API to allow websites to register themselves as possible handlers for particular protocols.
 */
-define(['Modernizr'], function( Modernizr ) {
+define(['Modernizr'], function(Modernizr) {
   Modernizr.addTest('customprotocolhandler', function() {
     // early bailout where it doesn't exist at all
-    if ( !navigator.registerProtocolHandler ) return false;
+    if (!navigator.registerProtocolHandler) {
+      return false;
+    }
 
     // registerProtocolHandler was stubbed in webkit for a while, and didn't
     // actually do anything. We intentionally set it improperly to test for

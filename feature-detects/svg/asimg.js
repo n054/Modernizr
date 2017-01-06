@@ -4,6 +4,7 @@
   "property": "svgasimg",
   "caniuse" : "svg-img",
   "tags": ["svg"],
+  "aliases": ["svgincss"],
   "authors": ["Chris Coyier"],
   "notes": [{
     "name": "HTML5 Spec",
@@ -11,7 +12,7 @@
   }]
 }
 !*/
-define(['Modernizr', 'addTest'], function( Modernizr ) {
+define(['Modernizr', 'addTest'], function(Modernizr) {
 
   // Original Async test by Stu Cox
   // https://gist.github.com/chriscoyier/8774501

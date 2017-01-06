@@ -5,16 +5,16 @@
   "tags": ["iframe"],
   "builderAliases": ["iframe_sandbox"],
   "notes": [
-    "False-positive on Firefox < 29",
   {
     "name": "WhatWG Spec",
-    "href": "http://www.whatwg.org/specs/web-apps/current-work/multipage/the-iframe-element.html#attr-iframe-sandbox"
-  }]
+    "href": "https://html.spec.whatwg.org/multipage/embedded-content.html#attr-iframe-sandbox"
+  }],
+  "knownBugs": [ "False-positive on Firefox < 29" ]
 }
 !*/
 /* DOC
 Test for `sandbox` attribute in iframes.
 */
-define(['Modernizr', 'createElement'], function( Modernizr, createElement ) {
+define(['Modernizr', 'createElement'], function(Modernizr, createElement) {
   Modernizr.addTest('sandbox', 'sandbox' in createElement('iframe'));
 });

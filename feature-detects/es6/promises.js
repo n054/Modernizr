@@ -11,7 +11,7 @@
     "href": "https://github.com/domenic/promises-unwrapping"
   },{
     "name": "Chromium dashboard - ES6 Promises",
-    "href": "http://www.chromestatus.com/features/5681726336532480"
+    "href": "https://www.chromestatus.com/features/5681726336532480"
   },{
     "name": "JavaScript Promises: There and back again - HTML5 Rocks",
     "href": "http://www.html5rocks.com/en/tutorials/es6/promises/"
@@ -21,7 +21,7 @@
 /* DOC
 Check if browser implements ECMAScript 6 Promises per specification.
 */
-define(['Modernizr'], function( Modernizr ) {
+define(['Modernizr'], function(Modernizr) {
   Modernizr.addTest('promises', function() {
     return 'Promise' in window &&
     // Some of these methods are missing from

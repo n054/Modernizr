@@ -8,10 +8,10 @@
   "authors": ["Krister Kari", "@amandeep", "Rich Bradshaw", "Ryan Seddon", "Paul Irish"],
   "notes": [{
     "name": "Webp Info",
-    "href": "http://code.google.com/speed/webp/"
+    "href": "https://developers.google.com/speed/webp/"
   }, {
     "name": "Chormium blog - Chrome 32 Beta: Animated WebP images and faster Chrome for Android touch input",
-    "href": "http://blog.chromium.org/2013/11/chrome-32-beta-animated-webp-images-and.html"
+    "href": "https://blog.chromium.org/2013/11/chrome-32-beta-animated-webp-images-and.html"
   }, {
     "name": "Webp Lossless Spec",
     "href": "https://developers.google.com/speed/webp/docs/webp_lossless_bitstream_specification"
@@ -20,13 +20,12 @@
     "href": "http://www.wope-framework.com/en/2013/06/24/webp-support-on-android-browsers/"
   }, {
     "name": "Chormium WebP announcement",
-    "href": "http://blog.chromium.org/2011/11/lossless-and-transparency-encoding-in.html?m=1"
+    "href": "https://blog.chromium.org/2011/11/lossless-and-transparency-encoding-in.html?m=1"
   }]
 }
 !*/
 /* DOC
 Tests for lossy, non-alpha webp support.
-=======
 
 Tests for all forms of webp support (lossless, lossy, alpha, and animated)..
 
@@ -36,17 +35,17 @@ Tests for all forms of webp support (lossless, lossy, alpha, and animated)..
   Modernizr.webp.animation    // Animated WebP
 
 */
-define(['Modernizr', 'addTest'], function( Modernizr, addTest ) {
+define(['Modernizr', 'addTest'], function(Modernizr, addTest) {
 
   Modernizr.addAsyncTest(function() {
 
     var webpTests = [{
       'uri': 'data:image/webp;base64,UklGRiQAAABXRUJQVlA4IBgAAAAwAQCdASoBAAEAAwA0JaQAA3AA/vuUAAA=',
       'name': 'webp'
-    },{
+    }, {
       'uri': 'data:image/webp;base64,UklGRkoAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAwAAAABBxAR/Q9ERP8DAABWUDggGAAAADABAJ0BKgEAAQADADQlpAADcAD++/1QAA==',
       'name': 'webp.alpha'
-    },{
+    }, {
       'uri': 'data:image/webp;base64,UklGRlIAAABXRUJQVlA4WAoAAAASAAAAAAAAAAAAQU5JTQYAAAD/////AABBTk1GJgAAAAAAAAAAAAAAAAAAAGQAAABWUDhMDQAAAC8AAAAQBxAREYiI/gcA',
       'name': 'webp.animation'
     }, {
@@ -63,13 +62,16 @@ define(['Modernizr', 'addTest'], function( Modernizr, addTest ) {
         // if the event is from 'onload', check the see if the image's width is
         // 1 pixel (which indiciates support). otherwise, it fails
 
-        var result = event.type === 'load' ? image.width == 1 : false;
+        var result = event && event.type === 'load' ? image.width == 1 : false;
         var baseTest = name === 'webp';
 
-        /* jshint -W053 */
-        addTest(name, baseTest ? new Boolean(result) : result);
+        // if it is the base test, and the result is false, just set a literal false
+        // rather than use the Boolean contrsuctor
+        addTest(name, (baseTest && result) ? new Boolean(result) : result);
 
-        if (cb) cb(event);
+        if (cb) {
+          cb(event);
+        }
       }
 
       image.onerror = addResult;
@@ -81,7 +83,7 @@ define(['Modernizr', 'addTest'], function( Modernizr, addTest ) {
     // test for webp support in general
     test(webp.name, webp.uri, function(e) {
       // if the webp test loaded, test everything else.
-      if (e.type === 'load') {
+      if (e && e.type === 'load') {
         for (var i = 0; i < webpTests.length; i++) {
           test(webpTests[i].name, webpTests[i].uri);
         }

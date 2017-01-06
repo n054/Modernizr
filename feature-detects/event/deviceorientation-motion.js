@@ -1,11 +1,11 @@
 /*!
 {
-  "name": "Device Orientation and Motion Events",
+  "name": "Orientation and Motion Events",
   "property": ["devicemotion", "deviceorientation"],
   "caniuse": "deviceorientation",
   "notes": [{
     "name": "W3C Editor's Draft",
-    "href": "http://dev.w3.org/geo/api/spec-source-orientation.html"
+    "href": "http://w3c.github.io/deviceorientation/spec-source-orientation.html"
   },{
     "name": "Implementation by iOS Safari (Orientation)",
     "href": "http://goo.gl/fhce3"
@@ -25,7 +25,7 @@ Part of Device Access aspect of HTML5, same category as geolocation.
 
 `deviceorientation` tests for Device Orientation Event support, returns boolean value true/false
 */
-define(['Modernizr'], function( Modernizr ) {
+define(['Modernizr'], function(Modernizr) {
   Modernizr.addTest('devicemotion', 'DeviceMotionEvent' in window);
   Modernizr.addTest('deviceorientation', 'DeviceOrientationEvent' in window);
 });

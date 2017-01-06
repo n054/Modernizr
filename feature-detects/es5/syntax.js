@@ -17,10 +17,11 @@
 /* DOC
 Check if browser accepts ECMAScript 5 syntax.
 */
-define(['Modernizr'], function (Modernizr) {
-  Modernizr.addTest('es5syntax', function () {
+define(['Modernizr'], function(Modernizr) {
+  Modernizr.addTest('es5syntax', function() {
     var value, obj, stringAccess, getter, setter, reservedWords, zeroWidthChars;
     try {
+      /* eslint no-eval: "off" */
       // Property access on strings
       stringAccess = eval('"foobar"[3] === "b"');
       // Getter in property initializer

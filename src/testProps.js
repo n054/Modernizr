@@ -1,4 +1,4 @@
-define(['contains', 'mStyle', 'createElement', 'nativeTestProps', 'is', 'cssToDOM'], function( contains, mStyle, createElement, nativeTestProps, is, cssToDOM) {
+define(['contains', 'mStyle', 'createElement', 'nativeTestProps', 'is', 'cssToDOM'], function(contains, mStyle, createElement, nativeTestProps, is, cssToDOM) {
   // testProps is a generic CSS / DOM property test.
 
   // In testing support for a given CSS property, it's legit to test:
@@ -12,13 +12,13 @@ define(['contains', 'mStyle', 'createElement', 'nativeTestProps', 'is', 'cssToDO
 
   // Property names can be provided in either camelCase or kebab-case.
 
-  function testProps( props, prefixed, value, skipValueTest ) {
+  function testProps(props, prefixed, value, skipValueTest) {
     skipValueTest = is(skipValueTest, 'undefined') ? false : skipValueTest;
 
     // Try native detect first
     if (!is(value, 'undefined')) {
       var result = nativeTestProps(props, value);
-      if(!is(result, 'undefined')) {
+      if (!is(result, 'undefined')) {
         return result;
       }
     }
@@ -26,17 +26,21 @@ define(['contains', 'mStyle', 'createElement', 'nativeTestProps', 'is', 'cssToDO
     // Otherwise do it properly
     var afterInit, i, propsLength, prop, before;
 
-    // If we don't have a style element, that means
-    // we're running async or after the core tests,
-    // so we'll need to create our own elements to use
-    if ( !mStyle.style ) {
+    // If we don't have a style element, that means we're running async or after
+    // the core tests, so we'll need to create our own elements to use
+
+    // inside of an SVG element, in certain browsers, the `style` element is only
+    // defined for valid tags. Therefore, if `modernizr` does not have one, we
+    // fall back to a less used element and hope for the best.
+    // for strict XHTML browsers the hardly used samp element is used
+    var elems = ['modernizr', 'tspan', 'samp'];
+    while (!mStyle.style && elems.length) {
       afterInit = true;
-      mStyle.modElem = createElement('modernizr');
+      mStyle.modElem = createElement(elems.shift());
       mStyle.style = mStyle.modElem.style;
     }
 
-    // Delete the objects if we
-    // we created them.
+    // Delete the objects if we created them.
     function cleanElems() {
       if (afterInit) {
         delete mStyle.style;
@@ -45,7 +49,7 @@ define(['contains', 'mStyle', 'createElement', 'nativeTestProps', 'is', 'cssToDO
     }
 
     propsLength = props.length;
-    for ( i = 0; i < propsLength; i++ ) {
+    for (i = 0; i < propsLength; i++) {
       prop = props[i];
       before = mStyle.style[prop];
 
@@ -53,7 +57,7 @@ define(['contains', 'mStyle', 'createElement', 'nativeTestProps', 'is', 'cssToDO
         prop = cssToDOM(prop);
       }
 
-      if ( mStyle.style[prop] !== undefined ) {
+      if (mStyle.style[prop] !== undefined) {
 
         // If value to test has been passed in, do a set-and-check test.
         // 0 (integer) is a valid property value, so check that `value` isn't

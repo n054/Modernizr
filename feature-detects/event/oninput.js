@@ -7,7 +7,7 @@
     "href": "https://developer.mozilla.org/en-US/docs/Web/API/GlobalEventHandlers.oninput"
   },{
     "name": "WHATWG spec",
-    "href": "http://www.whatwg.org/specs/web-apps/current-work/multipage/common-input-element-attributes.html#common-event-behaviors"
+    "href": "https://html.spec.whatwg.org/multipage/forms.html#common-input-element-attributes"
   },{
     "name": "Detecting onInput support",
     "href": "http://danielfriesen.name/blog/2010/02/16/html5-browser-maze-oninput-support"
@@ -19,10 +19,11 @@
 /* DOC
 `oninput` tests if the browser is able to detect the input event
 */
-define(['Modernizr', 'docElement', 'createElement', 'testStyles', 'hasEvent'], function( Modernizr, docElement, createElement, testStyles, hasEvent ) {
+define(['Modernizr', 'docElement', 'createElement', 'testStyles', 'hasEvent'], function(Modernizr, docElement, createElement, testStyles, hasEvent) {
 
   Modernizr.addTest('oninput', function() {
     var input = createElement('input');
+    var supportsOnInput;
     input.setAttribute('oninput', 'return');
 
     if (hasEvent('oninput', docElement) || typeof input.oninput == 'function') {
@@ -35,7 +36,7 @@ define(['Modernizr', 'docElement', 'createElement', 'testStyles', 'hasEvent'], f
     try {
       // Older Firefox didn't map oninput attribute to oninput property
       var testEvent  = document.createEvent('KeyboardEvent');
-      var supportsOnInput = false;
+      supportsOnInput = false;
       var handler = function(e) {
         supportsOnInput = true;
         e.preventDefault();
@@ -49,7 +50,9 @@ define(['Modernizr', 'docElement', 'createElement', 'testStyles', 'hasEvent'], f
       input.dispatchEvent(testEvent);
       input.removeEventListener('input', handler, false);
       docElement.removeChild(input);
-      return supportsOnInput;
-    } catch (e) {}
+    } catch (e) {
+      supportsOnInput = false;
+    }
+    return supportsOnInput;
   });
 });

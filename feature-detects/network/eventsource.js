@@ -5,14 +5,14 @@
   "tags": ["network"],
   "builderAliases": ["network_eventsource"],
   "notes": [{
-    "name": "W3 Spec",
-    "href": "http://dev.w3.org/html5/eventsource/"
+    "name": "WHATWG Spec",
+    "href": "https://html.spec.whatwg.org/multipage/comms.html#server-sent-events"
   }]
 }
 !*/
 /* DOC
 Tests for server sent events aka eventsource.
 */
-define(['Modernizr'], function( Modernizr ) {
+define(['Modernizr'], function(Modernizr) {
   Modernizr.addTest('eventsource', 'EventSource' in window);
 });

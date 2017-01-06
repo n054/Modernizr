@@ -6,17 +6,19 @@
   "async" : false,
   "notes": [{
     "name": "Article",
-    "href": "http://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/"
+    "href": "https://blogs.adobe.com/webplatform/2013/01/30/winding-rules-in-canvas/"
   }]
 }
 !*/
 /* DOC
 Determines if winding rules, which controls if a path can go clockwise or counterclockwise
 */
-define(['Modernizr', 'createElement', 'test/canvas'], function( Modernizr, createElement ) {
+define(['Modernizr', 'createElement', 'test/canvas'], function(Modernizr, createElement) {
 
   Modernizr.addTest('canvaswinding', function() {
-    if (Modernizr.canvas === false) return false;
+    if (Modernizr.canvas === false) {
+      return false;
+    }
     var ctx = createElement('canvas').getContext('2d');
 
     ctx.rect(0, 0, 10, 10);

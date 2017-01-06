@@ -5,16 +5,16 @@
   "tags": ["image"],
   "notes": [{
     "name": "Smashing Magazine Article",
-    "href": "http://en.wikipedia.org/wiki/APNG"
+    "href": "https://en.wikipedia.org/wiki/APNG"
     },{
     "name": "Generate multi-resolution images for srcset with Grunt",
-    "href": "http://addyosmani.com/blog/generate-multi-resolution-images-for-srcset-with-grunt/"
+    "href": "https://addyosmani.com/blog/generate-multi-resolution-images-for-srcset-with-grunt/"
     }]
 }
 !*/
 /* DOC
 Test for the srcset attribute of images
 */
-define(['Modernizr', 'createElement'], function( Modernizr, createElement ) {
+define(['Modernizr', 'createElement'], function(Modernizr, createElement) {
   Modernizr.addTest('srcset', 'srcset' in createElement('img'));
 });

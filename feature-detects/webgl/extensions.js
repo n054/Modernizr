@@ -25,16 +25,15 @@ if ('OES_vertex_array_object' in Modernizr.webglextensions) {
 }
 ```
 */
-define(['Modernizr', 'createElement', 'test/webgl'], function( Modernizr, createElement ) {
+define(['Modernizr', 'createElement', 'test/webgl'], function(Modernizr, createElement) {
   // based on code from ilmari heikkinen
   // code.google.com/p/graphics-detect/source/browse/js/detect.js
 
   // Not Async but handles it's own self
   Modernizr.addAsyncTest(function() {
-    /* jshint -W053 */
 
     // Not a good candidate for css classes, so we avoid addTest stuff
-    Modernizr.webglextensions = new Boolean(false);
+    Modernizr.webglextensions = false;
 
     if (!Modernizr.webgl) {
       return;
@@ -57,7 +56,7 @@ define(['Modernizr', 'createElement', 'test/webgl'], function( Modernizr, create
       Modernizr.webglextensions = new Boolean(true);
     }
 
-    for (var i = -1, len = exts.length; ++i < len; ){
+    for (var i = -1, len = exts.length; ++i < len;) {
       Modernizr.webglextensions[exts[i]] = true;
     }
 

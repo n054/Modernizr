@@ -6,7 +6,7 @@
   "builderAliases": ["workers_blobworkers"],
   "notes": [{
     "name": "W3C Reference",
-    "href": "http://www.w3.org/TR/workers/"
+    "href": "https://www.w3.org/TR/workers/"
   }],
   "knownBugs": ["This test may output garbage to console."],
   "authors": ["Jussi Kalliokoski"],
@@ -16,7 +16,7 @@
 /* DOC
 Detects support for creating Web Workers from Blob URIs.
 */
-define(['Modernizr', 'addTest'], function( Modernizr, addTest ) {
+define(['Modernizr', 'addTest'], function(Modernizr, addTest) {
   Modernizr.addAsyncTest(function() {
     try {
       // we're avoiding using Modernizr._domPrefixes as the prefix capitalization on
@@ -28,16 +28,16 @@ define(['Modernizr', 'addTest'], function( Modernizr, addTest ) {
         URL         = URL || window.MozURL || window.webkitURL || window.MSURL || window.OURL;
       }
       var data    = 'Modernizr',
-          blob,
-          bb,
-          worker,
-          url,
-          timeout,
-          scriptText = 'this.onmessage=function(e){postMessage(e.data)}';
+        blob,
+        bb,
+        worker,
+        url,
+        timeout,
+        scriptText = 'this.onmessage=function(e){postMessage(e.data)}';
 
       try {
-        blob = new Blob([scriptText], {type:'text/javascript'});
-      } catch(e) {
+        blob = new Blob([scriptText], {type: 'text/javascript'});
+      } catch (e) {
         // we'll fall back to the deprecated BlobBuilder
       }
       if (!blob) {

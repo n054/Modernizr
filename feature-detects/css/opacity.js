@@ -3,18 +3,16 @@
   "name": "CSS Opacity",
   "caniuse": "css-opacity",
   "property": "opacity",
-  "tags": ["css"],
-  "notes": ["Opacity must be be in the range of [0.0,1.0], according to the spec."]
+  "tags": ["css"]
 }
 !*/
-define(['Modernizr', 'createElement', 'prefixes'], function( Modernizr, createElement, prefixes ) {
+define(['Modernizr', 'createElement', 'prefixes'], function(Modernizr, createElement, prefixes) {
   // Browsers that actually have CSS Opacity implemented have done so
   // according to spec, which means their return values are within the
   // range of [0.0,1.0] - including the leading zero.
 
   Modernizr.addTest('opacity', function() {
-    var elem = createElement('div');
-    var style = elem.style;
+    var style = createElement('a').style;
     style.cssText = prefixes.join('opacity:.55;');
 
     // The non-literal . in this regex is intentional:

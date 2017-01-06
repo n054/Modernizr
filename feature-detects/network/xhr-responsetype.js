@@ -1,18 +1,18 @@
 /*!
 {
-  "name": "XMLHttpRequest xhr.responseType",
+  "name": "XHR responseType",
   "property": "xhrresponsetype",
   "tags": ["network"],
   "notes": [{
     "name": "XMLHttpRequest Living Standard",
-    "href": "http://xhr.spec.whatwg.org/#the-responsetype-attribute"
+    "href": "https://xhr.spec.whatwg.org/#the-responsetype-attribute"
   }]
 }
 !*/
 /* DOC
 Tests for XMLHttpRequest xhr.responseType.
 */
-define(['Modernizr'], function( Modernizr ) {
+define(['Modernizr'], function(Modernizr) {
   Modernizr.addTest('xhrresponsetype', (function() {
     if (typeof XMLHttpRequest == 'undefined') {
       return false;

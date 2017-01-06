@@ -1,17 +1,27 @@
-define(['underscore'], function( _ ) {
-  return function( config ) {
+define(['lodash'], function(_) {
+  /**
+   * generate creates the base version of a Modernizr build, before the r.js
+   * optimizer actually generates the final code
+   *
+   * @access private
+   * @function generate
+   * @param {object} [config] - A configuration object
+   * @param {array} [config.options[]] - An array of options to include in the build
+   * @param {array} [config.feature-detects[]] - An array of the feature detects to include
+   * @returns {string} A string of the require.js build
+   */
+
+  return function generate(config) {
     // Set some defaults
     if (!config) {
       config = {};
     }
+
     config.options = config.options || [];
     config['feature-detects'] = config['feature-detects'] || [];
 
     // Some special cases
-    var setClasses = _(config.options).contains('setClasses');
-
-    // Remove the special cases
-    config.options = _(config.options).without('setClasses');
+    var setClasses = _.includes(config.options, 'setClasses');
 
     var output = 'require(["ModernizrProto", "Modernizr", "testRunner"';
 
@@ -20,13 +30,20 @@ define(['underscore'], function( _ ) {
       output += ', "setClasses", "classes"';
     }
 
-    // Load in the rest of the options (they dont return values, so they aren't declared
-    _(config.options).forEach(function (option) {
+    // Only allow one shiv at a time
+    if (_.includes(config.options, 'html5printshiv')) {
+      config.options = _.without(config.options, 'html5shiv');
+    }
+
+    // Load in the rest of the options, excluding special cases
+    // (they dont return values, so they aren't declared)
+    _.forEach(_.without(config.options, 'setClasses'), function(option) {
       output += ', "' + option + '"';
     });
 
     // Load in all the detects
-    _(config['feature-detects']).forEach(function (detect) {
+    _.forEach(config['feature-detects'], function(detect) {
+      detect = detect.indexOf('test/') === 0 ? detect : 'test/' + detect;
       output += ', "' + detect + '"';
     });
 

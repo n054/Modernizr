@@ -4,7 +4,7 @@
   "notes": [
     {
       "name": "W3C HTML Imports Specification",
-      "href": "http://w3c.github.io/webcomponents/spec/imports/"
+      "href": "https://w3c.github.io/webcomponents/spec/imports/"
     },
     {
       "name": "HTML Imports - #include for the web",
@@ -16,7 +16,10 @@
   "tags": ["html", "import"]
 }
 !*/
+/* DOC
+Detects support for HTML import, a feature that is used for loading in Web Components.
+ */
 
-define(['Modernizr'], function ( Modernizr ) {
-  Modernizr.addTest('htmlimports', 'import' in document.createElement('link'));
+define(['addTest', 'createElement'], function(addTest, createElement) {
+  addTest('htmlimports', 'import' in createElement('link'));
 });

@@ -8,7 +8,7 @@
     "href": "https://developer.mozilla.org/en-US/docs/Web/API/Proximity_Events"
   },{
     "name": "W3C specification",
-    "href": "http://www.w3.org/TR/proximity/"
+    "href": "https://www.w3.org/TR/proximity/"
   }],
   "property": "proximity",
   "tags": ["events", "proximity"]
@@ -17,9 +17,9 @@
 /* DOC
 Detects support for an API that allows users to get proximity related information from the device's proximity sensor.
 */
-define(['Modernizr', 'addTest'], function( Modernizr, addTest ) {
+define(['Modernizr', 'addTest'], function(Modernizr, addTest) {
 
-  Modernizr.addAsyncTest(function () {
+  Modernizr.addAsyncTest(function() {
 
     var timeout;
     var timeoutTime = 300;
@@ -37,7 +37,7 @@ define(['Modernizr', 'addTest'], function( Modernizr, addTest ) {
     }
 
     // Check if the browser has support for the API
-    if ( 'ondeviceproximity' in window && 'onuserproximity' in window ) {
+    if ('ondeviceproximity' in window && 'onuserproximity' in window) {
 
       // Check if the device has a proximity sensor
       // ( devices without such a sensor support the events but

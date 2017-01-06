@@ -7,23 +7,31 @@
   "authors": ["Craig Andrews (@candrews)"],
   "notes": [{
     "name" : "W3C VML reference",
-    "href": "http://www.w3.org/TR/NOTE-VML"
+    "href": "https://www.w3.org/TR/NOTE-VML"
   },{
     "name" : "Microsoft VML reference",
-    "href": "http://msdn.microsoft.com/en-us/library/bb263898%28VS.85%29.aspx"
+    "href": "https://msdn.microsoft.com/en-us/library/bb263898.aspx"
   }]
 }
 !*/
 /* DOC
 Detects support for VML.
 */
-define(['Modernizr', 'createElement'], function( Modernizr, createElement ) {
+define(['Modernizr', 'createElement', 'isSVG'], function(Modernizr, createElement, isSVG) {
   Modernizr.addTest('vml', function() {
     var containerDiv = createElement('div');
-    containerDiv.innerHTML = '<v:shape id="vml_flag1" adj="1" />';
-    var shape = containerDiv.firstChild;
-    shape.style.behavior = 'url(#default#VML)';
-    var supportsVml = shape ? typeof shape.adj == 'object': true;
-    return supportsVml;
+    var supports = false;
+    var shape;
+
+    if (!isSVG) {
+      containerDiv.innerHTML = '<v:shape id="vml_flag1" adj="1" />';
+      shape = containerDiv.firstChild;
+      if ('style' in shape) {
+        shape.style.behavior = 'url(#default#VML)';
+      }
+      supports = shape ? typeof shape.adj == 'object' : true;
+    }
+
+    return supports;
   });
 });

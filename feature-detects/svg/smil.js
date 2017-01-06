@@ -6,11 +6,11 @@
   "tags": ["svg"],
   "notes": [{
   "name": "W3C Synchronised Multimedia spec",
-  "href": "http://www.w3.org/AudioVideo/"
+  "href": "https://www.w3.org/AudioVideo/"
   }]
 }
 !*/
-define(['Modernizr', 'toStringFn'], function( Modernizr, toStringFn ) {
+define(['Modernizr', 'toStringFn'], function(Modernizr, toStringFn) {
   // SVG SMIL animation
   Modernizr.addTest('smil', function() {
     return !!document.createElementNS &&

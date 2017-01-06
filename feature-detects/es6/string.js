@@ -4,7 +4,7 @@
   "property": "es6string",
   "notes": [{
     "name": "unofficial ECMAScript 6 draft specification",
-    "href": "http://people.mozilla.org/~jorendorff/es6-draft.html"
+    "href": "https://people.mozilla.org/~jorendorff/es6-draft.html"
   }],
   "polyfills": ["es6shim"],
   "authors": ["Ron Waldon (@jokeyrhyme)"],
@@ -15,7 +15,7 @@
 /* DOC
 Check if browser implements ECMAScript 6 String per specification.
 */
-define(['Modernizr'], function (Modernizr) {
+define(['Modernizr'], function(Modernizr) {
   Modernizr.addTest('es6string', !!(String.fromCodePoint &&
     String.raw &&
     String.prototype.codePointAt &&

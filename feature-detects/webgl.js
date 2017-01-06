@@ -4,15 +4,16 @@
   "property": "webgl",
   "caniuse": "webgl",
   "tags": ["webgl", "graphics"],
-  "polyfills": ["jebgl", "webglcompat", "cwebgl", "iewebgl"]
+  "polyfills": ["jebgl", "cwebgl", "iewebgl"]
 }
 !*/
-define(['Modernizr', 'createElement'], function( Modernizr, createElement ) {
+define(['Modernizr', 'createElement'], function(Modernizr, createElement) {
   Modernizr.addTest('webgl', function() {
     var canvas = createElement('canvas');
-    if ('supportsContext' in canvas) {
-      return canvas.supportsContext('webgl') || canvas.supportsContext('experimental-webgl');
+    var supports = 'probablySupportsContext' in canvas ? 'probablySupportsContext' :  'supportsContext';
+    if (supports in canvas) {
+      return canvas[supports]('webgl') || canvas[supports]('experimental-webgl');
     }
-    return !!window.WebGLRenderingContext;
+    return 'WebGLRenderingContext' in window;
   });
 });

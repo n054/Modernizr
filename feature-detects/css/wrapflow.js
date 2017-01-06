@@ -4,10 +4,9 @@
   "property": "wrapflow",
   "tags": ["css"],
   "notes": [
-    "This is a separate test from the rest of CSS Exclusions as as IE10 has just implemented this alone.",
     {
       "name": "W3C Exclusions spec",
-      "href": "http://www.w3.org/TR/css3-exclusions"
+      "href": "https://www.w3.org/TR/css3-exclusions"
     },
     {
       "name": "Example by Adobe",
@@ -16,13 +15,14 @@
   ]
 }
 !*/
-define(['Modernizr', 'prefixed', 'docElement', 'createElement'], function( Modernizr, prefixed, docElement, createElement ) {
-  Modernizr.addTest('wrapflow', function () {
+define(['Modernizr', 'prefixed', 'docElement', 'createElement', 'isSVG'], function(Modernizr, prefixed, docElement, createElement, isSVG) {
+  Modernizr.addTest('wrapflow', function() {
     var prefixedProperty = prefixed('wrapFlow');
-    if (!prefixedProperty)
+    if (!prefixedProperty || isSVG) {
       return false;
+    }
 
-    var wrapFlowProperty = prefixedProperty.replace(/([A-Z])/g, function (str, m1) { return '-' + m1.toLowerCase(); }).replace(/^ms-/, '-ms-');
+    var wrapFlowProperty = prefixedProperty.replace(/([A-Z])/g, function(str, m1) { return '-' + m1.toLowerCase(); }).replace(/^ms-/, '-ms-');
 
     /* If the CSS parsing is there we need to determine if wrap-flow actually works to avoid false positive cases, e.g. the browser parses
        the property, but it hasn't got the implementation for the functionality yet. */

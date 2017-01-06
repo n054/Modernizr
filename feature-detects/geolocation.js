@@ -11,7 +11,6 @@
   "polyfills": [
     "joshuabell-polyfill",
     "webshims",
-    "geolocationshim",
     "geo-location-javascript",
     "geolocation-api-polyfill"
   ]
@@ -20,7 +19,7 @@
 /* DOC
 Detects support for the Geolocation API for users to provide their location to web applications.
 */
-define(['Modernizr'], function( Modernizr ) {
+define(['Modernizr'], function(Modernizr) {
   // geolocation is often considered a trivial feature detect...
   // Turns out, it's quite tricky to get right:
   //

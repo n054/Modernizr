@@ -6,11 +6,11 @@
   "builderAliases": ["css_backgroundsizecover"],
   "notes": [{
     "name" : "MDN Docs",
-    "href": "http://developer.mozilla.org/en/CSS/background-size"
+    "href": "https://developer.mozilla.org/en/CSS/background-size"
   }]
 }
 !*/
-define(['Modernizr', 'testAllProps'], function( Modernizr, testAllProps ) {
+define(['Modernizr', 'testAllProps'], function(Modernizr, testAllProps) {
   // Must test value, as this specifically tests the `cover` value
   Modernizr.addTest('bgsizecover', testAllProps('backgroundSize', 'cover'));
 });

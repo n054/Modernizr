@@ -5,17 +5,19 @@
   "caniuse": "contenteditable",
   "notes": [{
     "name": "WHATWG spec",
-    "href": "http://www.whatwg.org/specs/web-apps/current-work/multipage/editing.html#contenteditable"
+    "href": "https://html.spec.whatwg.org/multipage/interaction.html#contenteditable"
   }]
 }
 !*/
 /* DOC
 Detects support for the `contenteditable` attribute of elements, allowing their DOM text contents to be edited directly by the user.
 */
-define(['Modernizr', 'createElement', 'docElement'], function( Modernizr, createElement, docElement ) {
+define(['Modernizr', 'createElement', 'docElement'], function(Modernizr, createElement, docElement) {
   Modernizr.addTest('contenteditable', function() {
     // early bail out
-    if (!('contentEditable' in docElement)) return;
+    if (!('contentEditable' in docElement)) {
+      return;
+    }
 
     // some mobile browsers (android < 3.0, iOS < 5) claim to support
     // contentEditable, but but don't really. This test checks to see

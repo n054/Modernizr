@@ -14,7 +14,7 @@
 /* DOC
 Detects whether web workers can use `transferables` objects.
 */
-define(['Modernizr', 'addTest', 'test/blob', 'test/url/bloburls', 'test/workers/webworkers', 'test/typed-arrays'], function( Modernizr, addTest ) {
+define(['Modernizr', 'addTest', 'test/blob', 'test/url/bloburls', 'test/workers/webworkers', 'test/typed-arrays'], function(Modernizr, addTest) {
   Modernizr.addAsyncTest(function() {
     var prerequisites = !!(Modernizr.blobconstructor &&
                            Modernizr.bloburls &&
@@ -29,11 +29,11 @@ define(['Modernizr', 'addTest', 'test/blob', 'test/url/bloburls', 'test/workers/
     // Proper test if prerequisites are met
     try {
       var buffer,
-          scriptText = 'var hello = "world"',
-          blob = new Blob([scriptText], {type: 'text/javascript'}),
-          url = URL.createObjectURL(blob),
-          worker = new Worker(url),
-          timeout;
+        scriptText = 'var hello = "world"',
+        blob = new Blob([scriptText], {type: 'text/javascript'}),
+        url = URL.createObjectURL(blob),
+        worker = new Worker(url),
+        timeout;
 
       // Just in case...
       worker.onerror = fail;

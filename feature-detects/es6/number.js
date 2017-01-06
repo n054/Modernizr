@@ -4,7 +4,7 @@
   "property": "es6number",
   "notes": [{
     "name": "unofficial ECMAScript 6 draft specification",
-    "href": "http://people.mozilla.org/~jorendorff/es6-draft.html"
+    "href": "https://people.mozilla.org/~jorendorff/es6-draft.html"
   }],
   "polyfills": ["es6shim"],
   "authors": ["Ron Waldon (@jokeyrhyme)"],
@@ -15,7 +15,7 @@
 /* DOC
 Check if browser implements ECMAScript 6 Number per specification.
 */
-define(['Modernizr'], function (Modernizr) {
+define(['Modernizr'], function(Modernizr) {
   Modernizr.addTest('es6number', !!(Number.isFinite &&
     Number.isInteger &&
     Number.isSafeInteger &&
